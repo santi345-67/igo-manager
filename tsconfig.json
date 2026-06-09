@@ -1,0 +1,13 @@
+{
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules",
+    "app/node_modules",
+    "admin-panel/node_modules",
+    "app/.expo",
+    "admin-panel/dist",
+    "app/dist",
+    "supabase",
+    "**/*.log"
+  ]
+}

@@ -11,6 +11,7 @@
     "android": {
       "package": "com.dinamica.igo.manager"
     },
+    "plugins": [],
     "extra": {
       "SUPABASE_URL": "",
       "SUPABASE_ANON_KEY": ""

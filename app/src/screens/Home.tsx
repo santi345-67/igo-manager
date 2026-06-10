@@ -33,13 +33,23 @@ export default function Home({ navigation }: any) {
           <Text style={styles.title}>Mis Iniciativas</Text>
           <Text style={styles.subtitle}>Registra, prioriza y transforma tus ideas.</Text>
         </View>
-        <Pressable onPress={signOut} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Salir</Text>
-        </Pressable>
+        <View style={styles.headerActions}>
+          <Pressable onPress={() => navigation.navigate('Quadrants')} style={styles.matrixButton}>
+            <Text style={styles.matrixButtonText}>Matriz</Text>
+          </Pressable>
+          <Pressable onPress={signOut} style={styles.logoutButton}>
+            <Text style={styles.logoutText}>Salir</Text>
+          </Pressable>
+        </View>
       </View>
 
       {loading ? (
         <ActivityIndicator size="large" color="#2563eb" style={{ marginTop: 32 }} />
+      ) : initiatives.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyStateTitle}>Sin iniciativas aún</Text>
+          <Text style={styles.emptyStateText}>Crea tu primera iniciativa para comenzar</Text>
+        </View>
       ) : (
         <FlatList data={initiatives} renderItem={renderItem} keyExtractor={(item) => item.id} contentContainerStyle={{ paddingBottom: 140 }} />
       )}
@@ -53,11 +63,17 @@ export default function Home({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 24, backgroundColor: '#f8fafc' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 },
+  headerActions: { flexDirection: 'row', gap: 10, alignItems: 'center' },
   title: { fontSize: 28, fontWeight: '800', color: '#0f172a' },
   subtitle: { color: '#475569', marginTop: 4 },
+  matrixButton: { backgroundColor: '#2563eb', paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12 },
+  matrixButtonText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   logoutButton: { backgroundColor: '#e2e8f0', paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12 },
   logoutText: { color: '#0f172a', fontWeight: '700' },
+  emptyState: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 60 },
+  emptyStateTitle: { fontSize: 20, fontWeight: '700', color: '#0f172a', marginBottom: 8 },
+  emptyStateText: { color: '#64748b', textAlign: 'center' },
   card: { backgroundColor: '#fff', borderRadius: 18, padding: 18, marginBottom: 14, shadowColor: '#0f172a', shadowOpacity: 0.06, shadowRadius: 20, elevation: 3 },
   cardTitle: { fontSize: 18, fontWeight: '700', marginBottom: 4, color: '#0f172a' },
   cardSubtitle: { color: '#64748b', marginBottom: 10 },

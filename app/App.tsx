@@ -1,7 +1,10 @@
 import 'react-native-url-polyfill/auto';
+import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Notifications from 'expo-notifications';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { requestPushPermissions } from './src/lib/NotificationHandler';
 import Welcome from './src/screens/auth/Welcome';
 import RegisterStep1 from './src/screens/auth/RegisterStep1';
 import RegisterStep2 from './src/screens/auth/RegisterStep2';
@@ -13,6 +16,17 @@ import Quadrants from './src/screens/Quadrants';
 import ActionPlan from './src/screens/ActionPlan';
 
 const Stack = createNativeStackNavigator();
+
+// Configurar comportamiento de notificaciones
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 function AppRoutes() {
   const { session } = useAuth();
@@ -41,10 +55,19 @@ function AppRoutes() {
   );
 }
 
+function AppWithNotifications() {
+  useEffect(() => {
+    // Solicitar permisos de notificaciones al iniciar
+    requestPushPermissions();
+  }, []);
+
+  return <AppRoutes />;
+}
+
 export default function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <AppWithNotifications />
     </AuthProvider>
   );
 }

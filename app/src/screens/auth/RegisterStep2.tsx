@@ -20,40 +20,51 @@ export default function RegisterStep2({ route, navigation }: any) {
       return;
     }
     setLoading(true);
-    const message = await signUp(email, password);
-    if (message) {
-      Alert.alert('Error', message);
+    
+    try {
+      // 1. Crear usuario en Auth
+      const message = await signUp(email, password);
+      if (message) {
+        Alert.alert('Error', message);
+        setLoading(false);
+        return;
+      }
+
+      // 2. Obtener userId
+      const userResponse = await supabase.auth.getSession();
+      const userId = userResponse.data.session?.user?.id;
+      if (!userId) {
+        Alert.alert('Error', 'No se pudo obtener el ID del usuario.');
+        setLoading(false);
+        return;
+      }
+
+      // 3. Insertar datos del usuario
+      const { error } = await supabase.from('users').insert({
+        id: userId,
+        full_name: fullName,
+        company_name: companyName,
+        email,
+        phone,
+        sector,
+        company_size: companySize,
+        age_range: ageRange,
+        gender,
+      });
+
+      if (error) {
+        Alert.alert('Error', error.message);
+        setLoading(false);
+        return;
+      }
+
+      // 4. Navegar a Home
       setLoading(false);
-      return;
-    }
-
-    const userResponse = await supabase.auth.getSession();
-    const userId = userResponse.data.session?.user?.id;
-    if (!userId) {
-      Alert.alert('No se pudo crear el usuario.');
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    } catch (err) {
+      Alert.alert('Error', 'Ocurrió un error inesperado. Intenta de nuevo.');
       setLoading(false);
-      return;
     }
-
-    const { error } = await supabase.from('users').insert({
-      id: userId,
-      full_name: fullName,
-      company_name: companyName,
-      email,
-      phone,
-      sector,
-      company_size: companySize,
-      age_range: ageRange,
-      gender,
-    });
-
-    setLoading(false);
-    if (error) {
-      Alert.alert('Error', error.message);
-      return;
-    }
-
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   return (

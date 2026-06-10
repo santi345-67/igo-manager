@@ -36,7 +36,12 @@ ${suggestion}`, [
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: 24 }}>
-      <Text style={styles.title}>Matriz de Cuadrantes</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Matriz de Cuadrantes</Text>
+        <Pressable onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backButtonText}>← Atrás</Text>
+        </Pressable>
+      </View>
       <View style={styles.grid}>
         {['I', 'II', 'III', 'IV'].map((quadrant) => (
           <View key={quadrant} style={styles.cell}>
@@ -57,7 +62,10 @@ ${suggestion}`, [
 
 const styles = StyleSheet.create({
   container: { backgroundColor: '#f8fafc' },
-  title: { fontSize: 28, fontWeight: '800', color: '#0f172a', marginBottom: 18 },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  title: { fontSize: 28, fontWeight: '800', color: '#0f172a' },
+  backButton: { backgroundColor: '#e2e8f0', paddingVertical: 10, paddingHorizontal: 14, borderRadius: 12 },
+  backButtonText: { color: '#0f172a', fontWeight: '700', fontSize: 13 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
   cell: { width: '48%', backgroundColor: '#fff', borderRadius: 18, padding: 16, marginBottom: 16, minHeight: 180, shadowColor: '#0f172a', shadowOpacity: 0.05, shadowRadius: 18, elevation: 2 },
   cellTitle: { fontSize: 14, fontWeight: '700', marginBottom: 10, color: '#1e3a8a' },
